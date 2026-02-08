@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Be My Valentine 💖</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+
+      background:
+        linear-gradient(rgba(255, 182, 193, .65), rgba(255, 154, 158, .65)),
+        url("https://images.unsplash.com/photo-1517841905240-472988babdf9");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .wrapper {
+      position: relative;
+      width: 380px;
+      height: 350px;
+    }
+
+    /* HEART SHAPE */
+    .heart {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #ffc0cb;
+      transform: rotate(-45deg);
+      border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, .25);
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #ffc0cb;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -50%;
+    }
+
+    .heart::after {
+      left: 50%;
+    }
+
+    /* CONTENT */
+    .content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 38px;
+      color: #d6336c;
+      margin-bottom: 25px;
+    }
+
+    .buttons {
+      position: relative;
+      width: 220px;
+      height: 60px;
+    }
+
+    button {
+      border: none;
+      padding: 10px 22px;
+      border-radius: 25px;
+      font-size: 15px;
+      cursor: pointer;
+      position: absolute;
+      transition: transform .15s;
+    }
+
+    #yes {
+      background: #ff4d6d;
+      color: white;
+      left: 0;
+    }
+
+    #no {
+      background: #adb5bd;
+      color: #333;
+      right: 0;
+    }
+
+    /* Valentine message */
+    .valentine-message {
+      display: none;
+      font-family: 'Great Vibes', cursive;
+      font-size: 32px;
+      color: #d6336c;
+      line-height: 1.3;
+      animation: fade 1s ease;
+    }
+
+    /* Floating hearts */
+    .heart-float {
+      position: fixed;
+      bottom: -20px;
+      font-size: 20px;
+      animation: floatUp 4s linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* Heartbeat animation */
+    @keyframes heartbeat {
+      0% {
+        transform: rotate(-45deg) scale(1);
+      }
+
+      25% {
+        transform: rotate(-45deg) scale(1.08);
+      }
+
+      40% {
+        transform: rotate(-45deg) scale(1);
+      }
+
+      60% {
+        transform: rotate(-45deg) scale(1.12);
+      }
+
+      100% {
+        transform: rotate(-45deg) scale(1);
+      }
+    }
+
+    .heartbeat {
+      animation: heartbeat 1.4s ease-in-out infinite;
+    }
+
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrapper" id="heartBox">
+    <div class="heart"></div>
+
+    <div class="content" id="content">
+      <h1 id="question">Will you be my Valentine?</h1>
+
+      <div class="buttons" id="buttons">
+        <button id="yes">Yes ❤️</button>
+        <button id="no">No 🙈</button>
+      </div>
+
+      <div class="valentine-message" id="message">
+        Hello <span id="name"></span> 💖<br>
+        In a world full of choices, <br>
+        you chose *me* — and that means everything 🌹 <br>
+        I promise to choose you every day 💞
+
+      </div>
+    </div>
+  </div>
+  <audio id="romanticMusic" preload="auto">
+    <source src="file:///home/manish/Music/bb/dooron.mp3" type="audio/mpeg">
+  </audio>
+  <!-- <audio controls loop>
+    <source src="https://www.soundimage.eu/wp-content/uploads/2023/12/Soft-Piano-And-Strings-V2.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio> -->
+
+
+  <!-- <script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const heartBox = document.getElementById("heartBox");
+    const question = document.getElementById("question");
+    const buttons = document.getElementById("buttons");
+    const message = document.getElementById("message");
+    const music = document.getElementById("romanticMusic");
+
+    // Move NO button
+    noBtn.addEventListener("mouseenter", () => {
+      const x = Math.random() * 200 - 100;
+      const y = Math.random() * 200 - 100;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    // YES click magic ✨
+    yesBtn.addEventListener("click", () => {
+      question.style.display = "none";
+      buttons.style.display = "none";
+      message.style.display = "block";
+
+      // Play soft music
+      music.volume = 0.3;
+      music.play();
+
+      // Hearts explosion
+      for (let i = 0; i < 30; i++) {
+        createHeart();
+      }
+    });
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart-float";
+      heart.innerText = "💖";
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = 3 + Math.random() * 2 + "s";
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
+    }
+  </script> -->
+
+  <script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const heart = document.querySelector(".heart");
+    const question = document.getElementById("question");
+    const buttons = document.getElementById("buttons");
+    const message = document.getElementById("message");
+    const nameSpan = document.getElementById("name");
+    const music = document.getElementById("romanticMusic");
+
+    const herName = "Payal";
+
+    function moveNo(e) {
+      e.preventDefault();
+
+      const heartBox = document.getElementById("heartBox");
+      const noBtn = document.getElementById("no");
+
+      const boxRect = heartBox.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const padding = 20;
+
+      const maxX = boxRect.width - btnRect.width - padding;
+      const maxY = boxRect.height - btnRect.height - padding;
+
+      const x = Math.random() * maxX - maxX / 2;
+      const y = Math.random() * maxY - maxY / 2;
+
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    noBtn.addEventListener("click", moveNo);
+    noBtn.addEventListener("touchstart", moveNo);
+
+    yesBtn.addEventListener("click", () => {
+      // Replace content
+      question.style.display = "none";
+      buttons.style.display = "none";
+      message.style.display = "block";
+
+      // Insert name
+      nameSpan.textContent = herName;
+
+      // Start heartbeat
+      heart.classList.add("heartbeat");
+
+      // Play music
+      music.volume = 0.3;
+      music.play();
+
+      // Hearts explosion
+      for (let i = 0; i < 30; i++) {
+        createHeart();
+      }
+    });
+
+    function createHeart() {
+      const h = document.createElement("div");
+      h.className = "heart-float";
+      h.innerText = "💖";
+
+      h.style.left = Math.random() * 100 + "vw";
+      h.style.animationDuration = 3 + Math.random() * 2 + "s";
+
+      document.body.appendChild(h);
+
+      setTimeout(() => h.remove(), 5000);
+    }
+  </script>
+
+</body>
+
+</html>
