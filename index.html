@@ -24,18 +24,35 @@
 
       background:
         linear-gradient(rgba(255, 182, 193, .65), rgba(255, 154, 158, .65)),
-        url("https://images.unsplash.com/photo-1517841905240-472988babdf9");
+        url("./us5.jpg");
       background-size: cover;
-      background-position: center;
+      background-repeat: no-repeat;
+      background-position: center 25%;
     }
+
+    @media (max-aspect-ratio: 3/4) {
+      body {
+        background:
+          linear-gradient(rgba(255, 182, 193, .65), rgba(255, 154, 158, .65)),
+          url("./us4.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      .wrapper {
+        width: 300px;
+        height: 300px;
+      }
+    }
+
 
     .wrapper {
       position: relative;
-      width: 380px;
-      height: 350px;
+      width: 300px;
+      height: 300px;
     }
 
-    /* HEART SHAPE */
     .heart {
       position: absolute;
       width: 100%;
@@ -43,7 +60,8 @@
       background: #ffc0cb;
       transform: rotate(-45deg);
       border-radius: 20px;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, .25);
+      filter:
+        drop-shadow(0 0 15px rgba(255, 77, 109, 0.45)) drop-shadow(0 0 30px rgba(255, 77, 109, 0.25));
     }
 
     .heart::before,
@@ -52,9 +70,10 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      background: #ffc0cb;
+      background: inherit;
       border-radius: 50%;
     }
+
 
     .heart::before {
       top: -50%;
@@ -64,7 +83,6 @@
       left: 50%;
     }
 
-    /* CONTENT */
     .content {
       position: absolute;
       inset: 0;
@@ -96,7 +114,6 @@
       font-size: 15px;
       cursor: pointer;
       position: absolute;
-      transition: transform .15s;
     }
 
     #yes {
@@ -111,74 +128,74 @@
       right: 0;
     }
 
-    /* Valentine message */
     .valentine-message {
       display: none;
       font-family: 'Great Vibes', cursive;
       font-size: 32px;
       color: #d6336c;
-      line-height: 1.3;
-      animation: fade 1s ease;
+      line-height: 1.4;
     }
 
-    /* Floating hearts */
     .heart-float {
       position: fixed;
       bottom: -20px;
-      font-size: 20px;
+      font-size: 18px;
       animation: floatUp 4s linear forwards;
       pointer-events: none;
     }
 
     @keyframes floatUp {
-      0% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-
-      100% {
-        transform: translateY(-100vh) scale(1.5);
+      to {
+        transform: translateY(-100vh) scale(1.4);
         opacity: 0;
       }
     }
 
-    /* Heartbeat animation */
     @keyframes heartbeat {
-      0% {
+
+      0%,
+      100% {
         transform: rotate(-45deg) scale(1);
       }
 
-      25% {
-        transform: rotate(-45deg) scale(1.08);
-      }
-
-      40% {
-        transform: rotate(-45deg) scale(1);
+      30% {
+        transform: rotate(-45deg) scale(1.1);
       }
 
       60% {
-        transform: rotate(-45deg) scale(1.12);
+        transform: rotate(-45deg) scale(1.15);
       }
+    }
 
-      100% {
-        transform: rotate(-45deg) scale(1);
+    @keyframes glowPulse {
+      50% {
+        filter: drop-shadow(0 0 30px rgba(255, 77, 109, 0.8)) drop-shadow(0 0 60px rgba(255, 77, 109, 0.5));
       }
     }
 
     .heartbeat {
-      animation: heartbeat 1.4s ease-in-out infinite;
+      animation:
+        heartbeat 1.4s ease-in-out infinite,
+        glowPulse 1.4s ease-in-out infinite;
     }
 
+    .cursor {
+      display: inline-block;
+      margin-left: 4px;
+      animation: blink 1s infinite;
+      color: #d6336c;
+    }
 
-    @keyframes fade {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
+    @keyframes blink {
+
+      0%,
+      50% {
+        opacity: 1;
       }
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
+      50.01%,
+      100% {
+        opacity: 0;
       }
     }
   </style>
@@ -189,7 +206,7 @@
   <div class="wrapper" id="heartBox">
     <div class="heart"></div>
 
-    <div class="content" id="content">
+    <div class="content">
       <h1 id="question">Will you be my Valentine?</h1>
 
       <div class="buttons" id="buttons">
@@ -197,83 +214,87 @@
         <button id="no">No 🙈</button>
       </div>
 
-      <div class="valentine-message" id="message">
-        Hello <span id="name"></span> 💖<br>
-        In a world full of choices, <br>
-        you chose *me* — and that means everything 🌹 <br>
-        I promise to choose you every day 💞
-
-      </div>
+      <div class="valentine-message" id="message"></div>
     </div>
   </div>
-  <audio id="romanticMusic" preload="auto">
+
+  <audio id="romanticMusic">
     <source src="./dooron.mp3" type="audio/mpeg">
   </audio>
-  <!-- <audio controls loop>
-    <source src="https://www.soundimage.eu/wp-content/uploads/2023/12/Soft-Piano-And-Strings-V2.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio> -->
 
-
-  <!-- <script>
-    const noBtn = document.getElementById("no");
+  <script>
     const yesBtn = document.getElementById("yes");
-    const heartBox = document.getElementById("heartBox");
+    const noBtn = document.getElementById("no");
+    const heart = document.querySelector(".heart");
     const question = document.getElementById("question");
     const buttons = document.getElementById("buttons");
     const message = document.getElementById("message");
     const music = document.getElementById("romanticMusic");
 
-    // Move NO button
-    noBtn.addEventListener("mouseenter", () => {
-      const x = Math.random() * 200 - 100;
-      const y = Math.random() * 200 - 100;
-      noBtn.style.transform = `translate(${x}px, ${y}px)`;
-    });
+    const herName = "Payal";
+    let heartInterval;
 
-    // YES click magic ✨
+    function typeHTML(element, html, speed = 60, callback) {
+      element.innerHTML = "";
+      const cursor = document.createElement("span");
+      cursor.className = "cursor";
+      cursor.textContent = "|";
+
+      const tokens = html.match(/(<[^>]+>|[^<])/g);
+      let i = 0;
+
+      element.appendChild(cursor);
+
+      const timer = setInterval(() => {
+        cursor.remove();
+        element.innerHTML += tokens[i];
+        element.appendChild(cursor);
+        i++;
+
+        if (i >= tokens.length) {
+          clearInterval(timer);
+          cursor.remove();
+          if (callback) callback();
+        }
+      }, speed);
+    }
+
+
     yesBtn.addEventListener("click", () => {
       question.style.display = "none";
       buttons.style.display = "none";
       message.style.display = "block";
 
-      // Play soft music
+      heart.classList.add("heartbeat");
+
+      typeHTML(
+        message,
+        `Hello ${herName} 💖<br>
+  In a world full of choices,<br>
+  you chose <i>me</i> and it means everything to me 💗<br>
+  I promise to choose you Today, Tomorrow and Forever 💞`,
+        60,
+        () => {
+          setTimeout(() => {
+            message.innerHTML += "<br><br>";
+            typeHTML(
+              message,
+              "I love you ❤️✨",
+              90
+            );
+          }, 1200);
+        }
+      );
+
       music.volume = 0.3;
       music.play();
 
-      // Hearts explosion
-      for (let i = 0; i < 30; i++) {
-        createHeart();
+      for (let i = 0; i < 25; i++) createHeart();
+
+      if (!heartInterval) {
+        heartInterval = setInterval(createHeart, 400);
       }
     });
-
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.className = "heart-float";
-      heart.innerText = "💖";
-
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = 3 + Math.random() * 2 + "s";
-
-      document.body.appendChild(heart);
-
-      setTimeout(() => {
-        heart.remove();
-      }, 5000);
-    }
-  </script> -->
-
-  <script>
-    const noBtn = document.getElementById("no");
-    const yesBtn = document.getElementById("yes");
-    const heart = document.querySelector(".heart");
-    const question = document.getElementById("question");
-    const buttons = document.getElementById("buttons");
-    const message = document.getElementById("message");
-    const nameSpan = document.getElementById("name");
-    const music = document.getElementById("romanticMusic");
-
-    const herName = "Payal";
 
     function moveNo(e) {
       e.preventDefault();
@@ -297,39 +318,15 @@
 
     noBtn.addEventListener("click", moveNo);
     noBtn.addEventListener("touchstart", moveNo);
-
-    yesBtn.addEventListener("click", () => {
-      // Replace content
-      question.style.display = "none";
-      buttons.style.display = "none";
-      message.style.display = "block";
-
-      // Insert name
-      nameSpan.textContent = herName;
-
-      // Start heartbeat
-      heart.classList.add("heartbeat");
-
-      // Play music
-      music.volume = 0.3;
-      music.play();
-
-      // Hearts explosion
-      for (let i = 0; i < 30; i++) {
-        createHeart();
-      }
-    });
+    noBtn.addEventListener("mouseenter", moveNo);
 
     function createHeart() {
       const h = document.createElement("div");
       h.className = "heart-float";
-      h.innerText = "💖";
-
+      const icons = ["💖", "💗", "💞", "🌸", "🌹"];
+      h.innerText = icons[Math.floor(Math.random() * icons.length)];
       h.style.left = Math.random() * 100 + "vw";
-      h.style.animationDuration = 3 + Math.random() * 2 + "s";
-
       document.body.appendChild(h);
-
       setTimeout(() => h.remove(), 5000);
     }
   </script>
